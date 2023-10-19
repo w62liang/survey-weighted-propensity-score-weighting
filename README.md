@@ -1,8 +1,9 @@
-# survey-weighted-propensity-score-weighting
+# Survey Weighted Propensity Score Weighting
 
 Algorithms and data for the manuscript titled "Propensity Score Weighting with Post-Treatment Survey Data" by Wei Liang and Changbao Wu.
 
-Find the original real data and documentations at:
+Please find original real data and their documentations at:
+
 https://meps.ahrq.gov/mepsweb/data_stats/download_data_files_detail.jsp?cboPufNumber=HC-224
 
-The file "h224_na.csv" is the data table having been pre-processed and can be used directly. Note that the data table has missing values.
+"h224_na.csv" has been pre-processed and can be used straightforwardly. The data have missing values.
