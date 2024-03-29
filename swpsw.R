@@ -231,8 +231,8 @@ dat_ <- dat_h224[((dat_h224$race==1)|(dat_h224$race==2)),]
 dat_$race[dat_$race==1] <- 0
 dat_$race[dat_$race==2] <- 1
 
-# sub-population: 18<=age<=55
-ind_sub <- (dat_$age>=18)&(dat_$age<=55)
+# sub-population: 18<=age<=59
+ind_sub <- (dat_$age>=18)&(dat_$age<=59)
 
 # estimate the SFATE by survey-weghited GLM method
 xname <- colnames(dat_)[!colnames(dat_)%in%c("health_care_exp",
