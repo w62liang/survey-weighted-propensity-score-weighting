@@ -1,21 +1,21 @@
-#########################################################
-#           Algorithms for the paper titled             # 
-# "Propensity Score Weighting with Post-Treatment Data" #
-#########################################################
-# Author: Wei Liang and Changbao Wu                     #
-# Date: 2023-09-24                                      #
-#########################################################
+################################################################
+#           Algorithms for the paper titled                    # 
+# "Propensity Score Weighting with Post-Treatment Survey Data" #
+################################################################
+# Author: Wei Liang and Changbao Wu                            #
+# Date: 2023-09-24                                             #
+################################################################
 
 
 ### Survey-weighted covariate balancing score function
 
 #-------------------inputs----------------------
-# subsampleat: index of the treated individuals
-# subsampleac: index of the control individuals
+# subsampleat: indices of the treated individuals
+# subsampleac: indices of the control individuals
 # x: initial value
 # weights: survey weights
 # X: design matrix of covariates
-# the values of a and b relies on the estimand
+# the values of a and b rely on the estimand
 #-------------------------------------------------
 
 score_bal <- function(x, subsamplet, subsamplec, weights, X, a = -1, b = -1){
