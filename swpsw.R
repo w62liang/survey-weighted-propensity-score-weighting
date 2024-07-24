@@ -50,8 +50,8 @@ score_bal <- function(x, subsamplet, subsamplec, weights, X, a = -1, b = -1){
 # outcomes.
 #------------------------------------------------------------------------------
 
-svypsw <- function(swt, dat, x_name, y_name, t_name, estimand = "SFATE", 
-                       method = "CBPS", subgroup){
+svypsw <- function(swt, dat, x_name, y_name, t_name, estimand = "SATE", 
+                       method = "SWCBPSW", subgroup){
   
   # estimated population size and sample size
   Nb <- sum(swt)
@@ -71,15 +71,15 @@ svypsw <- function(swt, dat, x_name, y_name, t_name, estimand = "SFATE",
   X <- as.matrix(data.frame(model.matrix(~., data = dat[,x_name])))
   
   # estimands
-  if(estimand == "SFATE"){
+  if(estimand == "SATE"){
     a <- -1
     b <- -1
   }
-  if(estimand == "SFATT"){
+  if(estimand == "SATT"){
     a <- 0
     b <- -1
   }
-  if(estimand == "SFATO"){
+  if(estimand == "SATO"){
     a <- 0
     b <- 0
   }
@@ -90,11 +90,11 @@ svypsw <- function(swt, dat, x_name, y_name, t_name, estimand = "SFATE",
   alpha_ml <- fit$coefficients
   
   # estimated propensity score
-  if(method == "GLM"){
+  if(method == "SWPSWMLE"){
   e_fit <- fit$fitted.values
   }
   
-  if(method == "CBPS"){
+  if(method == "SWCBPSW"){
   alpha_bal <- nleqslv(fn = score_bal, subsamplet = subsamplet, 
                          subsamplec = subsamplec, weights = swt/Nb,
                          X = X, x = alpha_ml,a = a, b = b)$x
@@ -116,11 +116,11 @@ svypsw <- function(swt, dat, x_name, y_name, t_name, estimand = "SFATE",
   ## variance estimation 
   wt <- wt1 - wt0
   
-  if(method=="GLM"){
+  if(method=="SWPSWMLE"){
     wtps <- treat - ps
     fdr_ps <- -ps*(1-ps)
   }
-  if(method=="CBPS"){
+  if(method=="SWCBPSW"){
     wtps <- wt
       if((a == -1)&&(b == -1)){
         fdr_ps <- -(1-ps)/ps*subtreat - ps/(1-ps)*subcontrol
@@ -239,15 +239,15 @@ xname <- colnames(dat_)[!colnames(dat_)%in%c("health_care_exp",
                                              "personal_weights","race")]
 
 swglm_ate <- svypsw(swt = dat_$personal_weights, dat = dat_, x_name = xname,
-       y_name = "health_care_exp", t_name = "race", method = "GLM",
-       estimand = "SFATE", subgroup = ind_sub)
+       y_name = "health_care_exp", t_name = "race", method = "SWPSWMLE",
+       estimand = "SATE", subgroup = ind_sub)
 
 cat("estimate:",swglm_ate$estimate," standard error:", swglm_ate$std.er)
 
 # estimate the SFATT by survey-weghited CBPS method
 swcbps_att <- svypsw(swt = dat_$personal_weights, dat = dat_, x_name = xname,
-                y_name = "health_care_exp", t_name = "race", method = "CBPS",
-                estimand = "SFATT", subgroup = ind_sub)
+                y_name = "health_care_exp", t_name = "race", method = "SWCBPSW",
+                estimand = "SATT", subgroup = ind_sub)
 
 cat("estimate:",swcbps_att$estimate," standard error:", swcbps_att$std.er)
 
