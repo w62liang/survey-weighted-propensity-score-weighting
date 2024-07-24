@@ -234,7 +234,7 @@ dat_$race[dat_$race==2] <- 1
 # sub-population: 18<=age<=59
 ind_sub <- (dat_$age>=18)&(dat_$age<=59)
 
-# estimate the SFATE by survey-weghited GLM method
+# estimate the SATE by survey-weghited PSW with maximum likelihood estimator method
 xname <- colnames(dat_)[!colnames(dat_)%in%c("health_care_exp",
                                              "personal_weights","race")]
 
@@ -244,7 +244,7 @@ swglm_ate <- svypsw(swt = dat_$personal_weights, dat = dat_, x_name = xname,
 
 cat("estimate:",swglm_ate$estimate," standard error:", swglm_ate$std.er)
 
-# estimate the SFATT by survey-weghited CBPS method
+# estimate the SATT by survey-weghited CBPSW method
 swcbps_att <- svypsw(swt = dat_$personal_weights, dat = dat_, x_name = xname,
                 y_name = "health_care_exp", t_name = "race", method = "SWCBPSW",
                 estimand = "SATT", subgroup = ind_sub)
